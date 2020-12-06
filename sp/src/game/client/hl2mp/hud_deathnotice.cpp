@@ -337,11 +337,15 @@ void CHudDeathNotice::FireGameEvent( IGameEvent * event )
 	}
 	else
 	{
-		Q_snprintf( sDeathMsg, sizeof( sDeathMsg ), "%s killed %s", deathMsg.Killer.szName, deathMsg.Victim.szName );
+		int len = Q_snprintf( sDeathMsg, sizeof( sDeathMsg ), "%s killed %s", deathMsg.Killer.szName, deathMsg.Victim.szName );
 
-		if ( fullkilledwith && *fullkilledwith && (*fullkilledwith > 13 ) )
+		if ( Q_strlen(fullkilledwith) > 6 )
 		{
-			Q_strncat( sDeathMsg, VarArgs( " with %s.\n", fullkilledwith+6 ), sizeof( sDeathMsg ), COPY_ALL_CHARACTERS );
+			Q_snprintf(sDeathMsg + len, sizeof(sDeathMsg) - len, " with %s.\n", fullkilledwith + 6);
+		}
+		else
+		{
+			Q_strncpy(sDeathMsg + len, ".\n", sizeof(sDeathMsg) - len);
 		}
 	}
 
